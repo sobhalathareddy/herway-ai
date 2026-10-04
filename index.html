@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HerWay AI — Your Intelligent Safety Companion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink-950:#0d1526;
+  --ink-900:#121d33;
+  --ink-800:#182746;
+  --ink-700:#20315a;
+  --ink-600:#2c4173;
+  --line:#324772;
+  --line-soft:#243456;
+  --paper:#f6f3ec;
+  --paper-dim:#d8d3c4;
+  --text-hi:#f4f1e8;
+  --text-mid:#b9c2dc;
+  --text-low:#8592b4;
+  --lantern:#d9a44a;
+  --lantern-dim:#7a5f2e;
+  --lantern-ink:#2a1f0c;
+  --brick:#c1443c;
+  --brick-dim:#4a201d;
+  --moss:#5f9e73;
+  --moss-dim:#24422f;
+  --amberwarn:#d6a13a;
+  --tangerine:#d97b3d;
+  --radius-card:22px;
+  --radius-sm:12px;
+  --serif:'Fraunces', Georgia, serif;
+  --sans:'Inter', -apple-system, sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:var(--sans);
+  background:var(--ink-950);
+  color:var(--text-hi);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;cursor:pointer;}
+input,textarea,select{font-family:inherit;}
+::selection{background:var(--lantern);color:var(--lantern-ink);}
+@media (prefers-reduced-motion:reduce){*{animation-duration:0.01ms !important;transition-duration:0.01ms !important;}}
+
+/* ---------- Shell ---------- */
+#shell{
+  max-width:480px;
+  margin:0 auto;
+  min-height:100vh;
+  background:linear-gradient(180deg, var(--ink-950) 0%, var(--ink-900) 100%);
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  box-shadow:0 0 80px rgba(0,0,0,0.5);
+}
+@media (min-width:640px){
+  body{background:var(--ink-950);}
+  #shell{margin:24px auto;min-height:calc(100vh - 48px);border-radius:28px;overflow:hidden;border:1px solid var(--line-soft);}
+}
+#screen{flex:1;padding-bottom:92px;position:relative;}
+.screen-inner{animation:rise 380ms cubic-bezier(.22,.61,.36,1);}
+@keyframes rise{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);} }
+
+/* ---------- Topbar ---------- */
+.topbar{
+  display:flex;align-items:center;gap:12px;
+  padding:20px 20px 16px;
+  position:sticky;top:0;z-index:20;
+  background:linear-gradient(180deg, var(--ink-950) 70%, rgba(13,21,38,0));
+}
+.topbar .back{
+  width:38px;height:38px;border-radius:50%;
+  border:1px solid var(--line);background:var(--ink-800);
+  color:var(--text-hi);display:flex;align-items:center;justify-content:center;
+  flex:none;font-size:18px;
+}
+.topbar h1{font-family:var(--serif);font-weight:600;font-size:20px;margin:0;letter-spacing:-0.01em;flex:1;}
+.topbar .role-chip{
+  font-size:11.5px;color:var(--text-mid);border:1px solid var(--line);
+  padding:5px 10px;border-radius:100px;white-space:nowrap;
+}
+
+/* ---------- Brand mark ---------- */
+.brandmark{display:flex;align-items:center;gap:10px;}
+.brandmark svg{flex:none;}
+.brandmark .word{font-family:var(--serif);font-weight:600;font-size:19px;letter-spacing:-0.01em;}
+.brandmark .word em{font-style:normal;color:var(--lantern);}
+
+/* ---------- Cards & structure ---------- */
+.px{padding-left:20px;padding-right:20px;}
+.card{
+  background:var(--ink-800);
+  border:1px solid var(--line-soft);
+  border-radius:var(--radius-card);
+  padding:20px;
+}
+.card + .card{margin-top:12px;}
+.rule{height:1px;background:var(--line-soft);border:0;margin:16px 0;}
+.eyebrow{font-size:12.5px;color:var(--lantern);font-weight:600;margin:0 0 6px;}
+.h1{font-family:var(--serif);font-size:28px;line-height:1.15;font-weight:600;letter-spacing:-0.01em;margin:0 0 8px;}
+.h2{font-family:var(--serif);font-size:21px;line-height:1.25;font-weight:600;margin:0 0 4px;}
+.lede{color:var(--text-mid);font-size:14.5px;line-height:1.5;margin:0;}
+.small{font-size:12.5px;color:var(--text-low);}
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;border:none;border-radius:100px;
+  padding:16px 20px;font-size:15.5px;font-weight:600;
+  transition:transform 120ms ease, filter 120ms ease;
+}
+.btn:active{transform:scale(0.98);}
+.btn-primary{background:var(--lantern);color:var(--lantern-ink);}
+.btn-primary:hover{filter:brightness(1.06);}
+.btn-ghost{background:transparent;color:var(--text-hi);border:1px solid var(--line);}
+.btn-ghost:hover{background:var(--ink-700);}
+.btn-quiet{background:var(--ink-700);color:var(--text-hi);}
+.btn-danger{background:var(--brick);color:#fff2ee;}
+.btn-sm{padding:10px 16px;font-size:13.5px;width:auto;}
+.link-btn{background:none;border:none;color:var(--lantern);font-weight:600;font-size:14.5px;padding:0;}
+
+/* ---------- Inputs ---------- */
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:12.5px;color:var(--text-mid);margin-bottom:6px;font-weight:600;}
+.field input, .field textarea, .field select{
+  width:100%;background:var(--ink-900);border:1px solid var(--line);
+  border-radius:var(--radius-sm);padding:13px 14px;color:var(--text-hi);font-size:14.5px;
+  outline:none;
+}
+.field input:focus, .field textarea:focus, .field select:focus{border-color:var(--lantern);}
+.field textarea{resize:vertical;min-height:110px;line-height:1.5;}
+.chip-row{display:flex;gap:8px;flex-wrap:wrap;}
+.chip{
+  border:1px solid var(--line);background:var(--ink-900);color:var(--text-mid);
+  padding:9px 14px;border-radius:100px;font-size:13px;font-weight:500;
+}
+.chip.active{border-color:var(--lantern);color:var(--lantern);background:rgba(217,164,74,0.08);}
+
+/* ---------- Feature grid ---------- */
+.feature{
+  display:flex;align-items:flex-start;gap:14px;
+  background:var(--ink-800);border:1px solid var(--line-soft);
+  border-radius:var(--radius-card);padding:18px;
+}
+.feature .icon{
+  width:44px;height:44px;border-radius:14px;flex:none;
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+}
+.feature h3{font-family:var(--serif);font-size:17px;margin:0 0 4px;font-weight:600;}
+.feature p{margin:0 0 12px;color:var(--text-mid);font-size:13.5px;line-height:1.45;}
+
+/* ---------- Bottom nav ---------- */
+.bottomnav{
+  position:absolute;left:0;right:0;bottom:0;
+  display:flex;justify-content:space-around;align-items:center;
+  padding:10px 8px calc(10px + env(safe-area-inset-bottom));
+  background:var(--ink-900);border-top:1px solid var(--line-soft);
+}
+.navitem{
+  background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:4px;
+  color:var(--text-low);font-size:10.5px;font-weight:600;padding:6px 10px;border-radius:12px;
+}
+.navitem.active{color:var(--lantern);}
+.navitem .dot{width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+
+/* ---------- SOS floating button ---------- */
+.sos-fab{
+  position:absolute;right:20px;bottom:96px;z-index:15;
+  width:58px;height:58px;border-radius:50%;
+  background:var(--brick);color:#fff;border:none;
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  box-shadow:0 8px 24px rgba(193,68,60,0.45);
+}
+.sos-fab::after{
+  content:'';position:absolute;inset:-6px;border-radius:50%;
+  border:1.5px solid rgba(193,68,60,0.5);
+  animation:pulse-ring 2.4s ease-out infinite;
+}
+@keyframes pulse-ring{0%{transform:scale(0.9);opacity:0.8;}100%{transform:scale(1.5);opacity:0;}}
+
+/* ---------- Risk badges ---------- */
+.risk-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 13px;border-radius:100px;font-size:13px;font-weight:700;}
+.risk-low{background:rgba(95,158,115,0.15);color:var(--moss);}
+.risk-medium{background:rgba(214,161,58,0.15);color:var(--amberwarn);}
+.risk-high{background:rgba(217,123,61,0.16);color:var(--tangerine);}
+.risk-critical{background:rgba(193,68,60,0.16);color:#e57b73;}
+.dot-ind{width:8px;height:8px;border-radius:50%;background:currentColor;}
+
+/* ---------- Route map (stylised) ---------- */
+.mapcard{
+  position:relative;height:220px;border-radius:var(--radius-card);
+  background:
+    radial-gradient(circle at 20% 20%, rgba(217,164,74,0.08), transparent 40%),
+    var(--ink-900);
+  border:1px solid var(--line-soft);
+  overflow:hidden;
+}
+.mapcard svg{position:absolute;inset:0;width:100%;height:100%;}
+.map-pin{
+  position:absolute;transform:translate(-50%,-100%);
+  display:flex;flex-direction:column;align-items:center;
+}
+.map-pin .pinhead{
+  width:14px;height:14px;border-radius:50%;border:3px solid var(--ink-950);
+}
+.map-pin.start .pinhead{background:var(--lantern);}
+.map-pin.end .pinhead{background:var(--brick);}
+.map-pin.live .pinhead{background:var(--moss);box-shadow:0 0 0 6px rgba(95,158,115,0.25);}
+.map-pin .label{font-size:10.5px;color:var(--text-mid);margin-top:4px;background:var(--ink-950);padding:2px 6px;border-radius:6px;}
+
+/* ---------- Toggle ---------- */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;}
+.toggle-row + .toggle-row{border-top:1px solid var(--line-soft);}
+.switch{width:44px;height:26px;border-radius:100px;background:var(--ink-700);position:relative;border:1px solid var(--line);flex:none;}
+.switch.on{background:var(--lantern-dim);border-color:var(--lantern);}
+.switch .knob{position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text-low);transition:transform 160ms ease, background 160ms ease;}
+.switch.on .knob{transform:translateX(18px);background:var(--lantern);}
+
+/* ---------- Toast ---------- */
+#toast{
+  position:absolute;left:16px;right:16px;bottom:100px;z-index:60;
+  background:var(--ink-700);border:1px solid var(--line);
+  border-radius:16px;padding:14px 16px;font-size:13.5px;
+  display:flex;align-items:center;gap:10px;
+  transform:translateY(20px);opacity:0;pointer-events:none;
+  transition:transform 240ms ease, opacity 240ms ease;
+}
+#toast.show{transform:translateY(0);opacity:1;}
+
+/* ---------- Modal ---------- */
+.modal-back{
+  position:absolute;inset:0;background:rgba(8,12,22,0.72);z-index:70;
+  display:flex;align-items:flex-end;justify-content:center;
+  animation:fadein 200ms ease;
+}
+@keyframes fadein{from{opacity:0;}to{opacity:1;}}
+.modal-sheet{
+  width:100%;max-width:480px;background:var(--ink-800);
+  border-radius:24px 24px 0 0;padding:24px 20px calc(24px + env(safe-area-inset-bottom));
+  border:1px solid var(--line-soft);border-bottom:none;
+  animation:sheetup 260ms cubic-bezier(.22,.61,.36,1);
+}
+@keyframes sheetup{from{transform:translateY(100%);}to{transform:translateY(0);}}
+
+/* ---------- misc ---------- */
+.avatar{width:42px;height:42px;border-radius:50%;background:var(--ink-700);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600;font-size:15px;flex:none;color:var(--text-hi);}
+.row-between{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.stack{display:flex;flex-direction:column;gap:10px;}
+.pill-status{font-size:12px;font-weight:700;padding:5px 11px;border-radius:100px;display:inline-flex;align-items:center;gap:6px;}
+.status-active{background:rgba(95,158,115,0.15);color:var(--moss);}
+.status-pending{background:rgba(214,161,58,0.15);color:var(--amberwarn);}
+.status-done{background:rgba(140,150,180,0.15);color:var(--text-mid);}
+.disc{border-left:3px solid var(--lantern-dim);padding:10px 14px;background:var(--ink-900);border-radius:0 10px 10px 0;font-size:12.5px;color:var(--text-mid);line-height:1.5;}
+.msg{max-width:82%;padding:12px 14px;border-radius:16px;font-size:14px;line-height:1.45;}
+.msg.ai{background:var(--ink-700);align-self:flex-start;border-bottom-left-radius:4px;}
+.msg.user{background:var(--lantern-dim);color:var(--text-hi);align-self:flex-end;border-bottom-right-radius:4px;}
+.quickprompt{text-align:left;border:1px solid var(--line);background:var(--ink-800);color:var(--text-hi);padding:12px 14px;border-radius:14px;font-size:13.5px;}
+::-webkit-scrollbar{width:0;height:0;}
+</style>
+</head>
+<body>
+<div id="shell">
+  <div id="screen"></div>
+</div>
+<div id="toast"></div>
+<script>
+/* ============================================================
+   HERWAY AI — prototype application logic
+   Everything here is simulated demonstration data. No network
+   calls, no real location, no real AI. Clearly a prototype.
+============================================================ */
+
+const ICON = {
+  logo: `<svg width="30" height="30" viewBox="0 0 30 30" fill="none"><path d="M15 2.5 26 6.5V14C26 21.5 21 26.5 15 27.5C9 26.5 4 21.5 4 14V6.5L15 2.5Z" fill="#d9a44a"/><path d="M15 2.5 26 6.5V14C26 21.5 21 26.5 15 27.5" fill="#7a5f2e" fill-opacity="0.5"/><circle cx="15" cy="13" r="3.4" fill="#0d1526"/><path d="M10.5 20C10.5 17 12.5 15.5 15 15.5C17.5 15.5 19.5 17 19.5 20" stroke="#0d1526" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+};
+
+const nowPlus = (mins) => {
+  const d = new Date(Date.now() + mins * 60000);
+  return d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit'});
+};
+
+/* ---------------- Mock data store ---------------- */
+const DB = {
+  user: { name: 'Ananya', initials: 'AN' },
+  guardians: [
+    { id: 'g1', name: 'Priya', relation: 'Guardian', active: true, avatar: 'P' },
+    { id: 'g2', name: 'Anjali', relation: 'Trusted Contact', active: true, avatar: 'A' },
+    { id: 'g3', name: 'College Safety Team', relation: 'Organization', active: false, avatar: 'C' },
+  ],
+  routes: [
+    {
+      id: 'r1', name: 'Recommended route', distance: '4.2 km', minutes: 18,
+      note: 'Based on the available demonstration data, this route currently has fewer reported concerns than the alternatives.',
+      safePoints: 2, level: 'low',
+    },
+    {
+      id: 'r2', name: 'Fastest route', distance: '3.6 km', minutes: 14,
+      note: 'Slightly shorter, but passes through an area with limited demonstration Safe Point coverage.',
+      safePoints: 0, level: 'medium',
+    },
+    {
+      id: 'r3', name: 'Main road route', distance: '5.0 km', minutes: 21,
+      note: 'Longer and stays on well-lit main roads throughout, according to demonstration data.',
+      safePoints: 3, level: 'low',
+    },
+  ],
+  incidentCategories: [
+    'Suspicious Activity', 'Following / Stalking Concern', 'Harassment',
+    'Unsafe Environment', 'Campus Safety Concern', 'Workplace Safety Concern',
+    'Public Transport Safety Concern', 'Other',
+  ],
+  activeJourneys: [
+    { id: 'j1', user: 'Ananya', destination: 'College Campus', eta: '7:48 PM', status: 'active', distanceRemaining: '1.1 km' },
+  ],
+  pendingCheckins: [],
+  patterns: [
+    { area: 'Near Sector 12 Metro Station', count: 3, note: 'Multiple similar reports have been recorded in approximately the same area over the past two weeks. Administrative review is recommended.' },
+    { area: 'MG Road — north stretch', count: 2, note: 'A small increase in reports compared to the prior month. Not enough data to confirm a trend.' },
+  ],
+};
+
+/* ---------------- App state ---------------- */
+let S = {
+  screen: 'auth',
+  role: null,
+  selectedRoute: null,
+  selectedGuardianIds: ['g1', 'g2'],
+  journey: null, // {routeId, eta, status, distanceRemaining, startedAt}
+  checkin: { open: false, mode: 'ontime' }, // mode: 'ontime' | 'overdue'
+  incidentDraft: { text: '', category: '', locationShared: false },
+  incidentAnalysis: null,
+  chat: [
+    { from: 'ai', text: "Hi, I'm the HerWay AI Assistant. I can help you understand safety features here — ask me anything, or tap a quick prompt below." },
+  ],
+  emergency: { open: false },
+  guardianView: 'journeys', // 'journeys' | 'patterns'
+  viewingJourneyId: null,
+  history: [],
+};
+
+function go(screen, opts) {
+  S.history.push(S.screen);
+  S.screen = screen;
+  if (opts) Object.assign(S, opts);
+  render();
+  document.getElementById('screen').scrollTop = 0;
+}
+function back() {
+  const prev = S.history.pop();
+  S.screen = prev || (S.role ? (S.role === 'user' ? 'home' : 'guardianHome') : 'role');
+  render();
+}
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* ============================================================
+   RENDER HELPERS
+============================================================ */
+function topbar(title, opts = {}) {
+  return `
+  <div class="topbar">
+    ${opts.noBack ? '' : `<button class="back" data-action="back">‹</button>`}
+    <h1>${title}</h1>
+    ${opts.roleChip ? `<span class="role-chip">${opts.roleChip}</span>` : ''}
+  </div>`;
+}
+function brandHeader() {
+  return `<div class="brandmark px" style="padding-top:22px;">${ICON.logo}<span class="word">HerWay <em>AI</em></span></div>`;
+}
+function bottomNav(active) {
+  if (!S.role) return '';
+  const items = S.role === 'user'
+    ? [
+        ['home', '🏠', 'Home'],
+        ['saferouteInput', '🗺️', 'SafeRoute'],
+        ['incidentReport', '🚨', 'Report'],
+        ['assistant', '🤖', 'Assistant'],
+        ['profile', '👤', 'Profile'],
+      ]
+    : [
+        ['guardianHome', '🛡️', 'Journeys'],
+        ['guardianPatterns', '📊', 'Insights'],
+        ['assistant', '🤖', 'Assistant'],
+        ['profile', '👤', 'Profile'],
+      ];
+  return `<div class="bottomnav">
+    ${items.map(([id, icon, label]) => `
+      <button class="navitem ${active === id ? 'active' : ''}" data-nav="${id}">
+        <span class="dot">${icon}</span><span>${label}</span>
+      </button>`).join('')}
+  </div>`;
+}
+function sosFab() {
+  if (!S.role || S.role !== 'user') return '';
+  return `<button class="sos-fab" data-action="openEmergency" aria-label="Emergency Mode">🚨</button>`;
+}
+function riskBadge(level) {
+  const map = {
+    low: ['LOW', 'risk-low'], medium: ['MEDIUM', 'risk-medium'],
+    high: ['HIGH', 'risk-high'], critical: ['CRITICAL', 'risk-critical'],
+  };
+  const [label, cls] = map[level];
+  return `<span class="risk-badge ${cls}"><span class="dot-ind"></span>${label}</span>`;
+}
+
+/* ============================================================
+   SCREENS
+============================================================ */
+
+function screen_auth() {
+  return `
+  <div class="screen-inner" style="min-height:100%;display:flex;flex-direction:column;justify-content:center;padding:40px 24px;">
+    <div style="text-align:center;margin-bottom:36px;">
+      <div style="display:flex;justify-content:center;margin-bottom:16px;">
+        <div style="width:64px;height:64px;">${ICON.logo.replace('width="30" height="30"','width="64" height="64" viewBox="0 0 30 30"')}</div>
+      </div>
+      <h1 class="h1" style="font-size:30px;">Welcome to HerWay AI</h1>
+      <p class="lede">Your intelligent safety companion.</p>
+    </div>
+    <div class="field"><label>Email</label><input type="email" placeholder="you@example.com" value="ananya@example.com"></div>
+    <div class="field"><label>Password</label><input type="password" placeholder="••••••••" value="••••••••"></div>
+    <button class="btn btn-primary" style="margin-bottom:10px;" data-action="signin">Sign In</button>
+    <button class="btn btn-ghost" style="margin-bottom:18px;" data-action="signin">Create Account</button>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+      <div style="flex:1;height:1px;background:var(--line-soft);"></div>
+      <span class="small">or</span>
+      <div style="flex:1;height:1px;background:var(--line-soft);"></div>
+    </div>
+    <button class="btn btn-quiet" data-action="signin">Continue as Demo</button>
+    <p class="small" style="text-align:center;margin-top:22px;">This is a prototype. No real accounts, routes, or safety data are used.</p>
+  </div>`;
+}
+
+function screen_role() {
+  return `
+  <div class="screen-inner">
+    ${brandHeader()}
+    <div class="px" style="padding-top:22px;">
+      <h1 class="h1">How will you use HerWay AI?</h1>
+      <p class="lede" style="margin-bottom:20px;">You can switch roles later from your profile.</p>
+      <div class="stack">
+        <div class="card">
+          <div class="feature" style="border:none;padding:0;background:none;">
+            <div class="icon" style="background:rgba(217,164,74,0.15);">👩</div>
+            <div>
+              <h3>Woman / User</h3>
+              <p>Access personal safety tools, SafeRoute, incident reporting, AI guidance, and trusted Guardian support.</p>
+              <button class="btn btn-primary btn-sm" data-action="chooseRole" data-role="user">Continue as User</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="feature" style="border:none;padding:0;background:none;">
+            <div class="icon" style="background:rgba(95,158,115,0.15);">🛡️</div>
+            <div>
+              <h3>Women Guardian</h3>
+              <p>Monitor journeys and safety alerts that users have explicitly chosen to share with you.</p>
+              <button class="btn btn-quiet btn-sm" data-action="chooseRole" data-role="guardian">Continue as Guardian</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="small" style="margin-top:18px;">Guardians can only see users who have explicitly authorized them — never a full directory.</p>
+    </div>
+  </div>`;
+}
+
+function screen_home() {
+  return `
+  <div class="screen-inner">
+    ${topbar('HerWay AI', {noBack:true})}
+    <div class="px">
+      <p class="lede" style="margin-bottom:18px;">Hello, ${DB.user.name}. Stay safe and stay connected.</p>
+      <div class="stack">
+        <div class="feature">
+          <div class="icon" style="background:rgba(217,164,74,0.15);">🗺️</div>
+          <div style="flex:1;">
+            <h3>SafeRoute</h3>
+            <p>Find a safety-aware route and share your journey with trusted Guardians.</p>
+            <button class="btn btn-quiet btn-sm" data-nav="saferouteInput">Explore SafeRoute</button>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="icon" style="background:rgba(193,68,60,0.15);">🚨</div>
+          <div style="flex:1;">
+            <h3>Incident Report</h3>
+            <p>Report a safety concern and let AI organize the information for review.</p>
+            <button class="btn btn-quiet btn-sm" data-nav="incidentReport">Report Incident</button>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="icon" style="background:rgba(140,150,180,0.15);">🤖</div>
+          <div style="flex:1;">
+            <h3>AI Assistant</h3>
+            <p>Get guidance and help using HerWay AI safety features.</p>
+            <button class="btn btn-quiet btn-sm" data-nav="assistant">Ask AI</button>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="icon" style="background:rgba(95,158,115,0.15);">🛡️</div>
+          <div style="flex:1;">
+            <h3>My Guardians</h3>
+            <p>Manage trusted people who can receive your shared journey updates.</p>
+            <button class="btn btn-quiet btn-sm" data-nav="guardiansManage">Manage Guardians</button>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-danger" style="margin-top:18px;" data-action="openEmergency">🚨 Emergency Mode</button>
+    </div>
+  </div>`;
+}
+
+/* -------- SafeRoute -------- */
+function screen_saferouteInput() {
+  return `
+  <div class="screen-inner">
+    ${topbar('SafeRoute')}
+    <div class="px">
+      <p class="eyebrow">Find your safer route</p>
+      <h2 class="h2" style="margin-bottom:16px;">Where are you headed?</h2>
+      <div class="field"><label>Current Location</label><input id="fromInput" value="Green Park, Sector 8"></div>
+      <div class="field"><label>Destination</label><input id="toInput" value="College Campus"></div>
+      <div class="field">
+        <label>Preferred travel mode</label>
+        <div class="chip-row">
+          <button class="chip active" data-travel="walk">🚶 Walking</button>
+          <button class="chip" data-travel="transit">🚌 Public Transport</button>
+          <button class="chip" data-travel="drive">🚗 Driving</button>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="margin-top:8px;" data-action="analyzeRoutes">🛡️ Analyze Routes</button>
+    </div>
+  </div>`;
+}
+
+function screen_routeResults() {
+  return `
+  <div class="screen-inner">
+    ${topbar('Route Analysis')}
+    <div class="px">
+      <p class="eyebrow">AI-suggested options</p>
+      <p class="lede" style="margin-bottom:16px;">Demonstration analysis only — not a guarantee of safety.</p>
+      <div class="stack">
+        ${DB.routes.map(r => `
+          <div class="card">
+            <div class="row-between" style="margin-bottom:10px;">
+              <h3 class="h2" style="font-size:17px;">${r.id === 'r1' ? '🛡️ ' : ''}${r.name}</h3>
+              ${riskBadge(r.level)}
+            </div>
+            <div class="row-between small" style="margin-bottom:10px;">
+              <span>Distance: <strong style="color:var(--text-hi);">${r.distance}</strong></span>
+              <span>Time: <strong style="color:var(--text-hi);">${r.minutes} min</strong></span>
+              <span>Arrival: <strong style="color:var(--text-hi);">${nowPlus(r.minutes)}</strong></span>
+            </div>
+            <p class="lede" style="margin-bottom:10px;">${r.note}</p>
+            <p class="small" style="margin-bottom:12px;">📍 ${r.safePoints} verified Safe Point${r.safePoints===1?'':'s'} near this route</p>
+            <button class="btn btn-quiet btn-sm" data-action="selectRoute" data-route="${r.id}">Select this route</button>
+          </div>
+        `).join('')}
+      </div>
+      <div class="disc" style="margin-top:16px;">⚠️ Route recommendations are advisory and cannot guarantee personal safety.</div>
+    </div>
+  </div>`;
+}
+
+function screen_shareJourney() {
+  return `
+  <div class="screen-inner">
+    ${topbar('Share Your Journey')}
+    <div class="px">
+      <p class="lede" style="margin-bottom:16px;">Choose who can receive your journey updates.</p>
+      <div class="card">
+        <div class="stack">
+          ${DB.guardians.map(g => `
+            <label class="row-between" style="cursor:pointer;">
+              <span style="display:flex;align-items:center;gap:12px;">
+                <span class="avatar">${g.avatar}</span>
+                <span>
+                  <div style="font-weight:600;font-size:14.5px;">${g.name}</div>
+                  <div class="small">${g.relation}</div>
+                </span>
+              </span>
+              <input type="checkbox" data-guardian-check="${g.id}" ${S.selectedGuardianIds.includes(g.id) ? 'checked' : ''} style="width:20px;height:20px;accent-color:var(--lantern);">
+            </label>
+          `).join('')}
+        </div>
+      </div>
+      <p class="small" style="margin:14px 0;">Live location sharing only begins after you tap start — Guardians see nothing before that.</p>
+      <button class="btn btn-primary" data-action="startJourney">🟢 Start Safe Journey</button>
+    </div>
+  </div>`;
+}
+
+function mapSvgRoute(progress = 0.3) {
+  return `
+  <svg viewBox="0 0 320 220" preserveAspectRatio="none">
+    <path d="M40 190 C 90 150, 70 90, 140 70 S 260 40, 280 20" stroke="#324772" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M40 190 C 90 150, 70 90, 140 70 S 260 40, 280 20" stroke="#d9a44a" stroke-width="4" fill="none" stroke-linecap="round"
+      stroke-dasharray="1" pathLength="1" stroke-dashoffset="${1-progress}" style="stroke-dasharray:${progress} ${1-progress};"/>
+  </svg>`;
+}
+
+function screen_journeyTracking() {
+  const j = S.journey;
+  const progress = j.status === 'active' ? 0.45 : 1;
+  return `
+  <div class="screen-inner">
+    ${topbar('Journey Tracking')}
+    <div class="px">
+      <div class="mapcard" style="margin-bottom:14px;">
+        ${mapSvgRoute(progress)}
+        <div class="map-pin start" style="left:13%;top:86%;"><div class="pinhead"></div><span class="label">Start</span></div>
+        <div class="map-pin live" style="left:45%;top:42%;"><div class="pinhead"></div><span class="label">You</span></div>
+        <div class="map-pin end" style="left:88%;top:9%;"><div class="pinhead"></div><span class="label">Destination</span></div>
+      </div>
+      <div class="row-between" style="margin-bottom:14px;">
+        <span class="pill-status ${j.status === 'active' ? 'status-active' : 'status-done'}">
+          ${j.status === 'active' ? '🟢 LIVE JOURNEY TRACKING ACTIVE' : '✅ ARRIVED SAFELY'}
+        </span>
+      </div>
+      <div class="card">
+        <h3 class="eyebrow" style="margin-bottom:12px;">Journey Details</h3>
+        <div class="stack">
+          <div class="row-between"><span class="small">Current Location</span><strong>En route</strong></div>
+          <div class="row-between"><span class="small">Destination</span><strong>College Campus</strong></div>
+          <div class="row-between"><span class="small">Distance Remaining</span><strong>${j.status==='active' ? '1.1 km' : '0 km'}</strong></div>
+          <div class="row-between"><span class="small">Estimated Arrival</span><strong>${j.eta}</strong></div>
+          <div class="row-between"><span class="small">Journey Status</span><strong style="color:${j.status==='active' ? 'var(--moss)' : 'var(--text-mid)'}">${j.status==='active' ? 'Active' : 'Completed'}</strong></div>
+        </div>
+      </div>
+      <p class="small" style="margin:14px 0;">Selected Guardians can see this journey while sharing is active: ${S.selectedGuardianIds.map(id => DB.guardians.find(g=>g.id===id).name).join(', ')}.</p>
+      ${j.status === 'active' ? `<button class="btn btn-primary" data-action="arrivedSafely">✅ I Have Reached Safely</button>` : `<button class="btn btn-quiet" data-nav="home">Back to Home</button>`}
+      ${j.status === 'active' ? `<button class="btn btn-ghost" style="margin-top:10px;" data-action="simulateOverdue">Simulate: ETA passed without check-in</button>` : ''}
+    </div>
+  </div>`;
+}
+
+function screen_checkin() {
+  const overdue = S.checkin.mode === 'overdue';
+  return `
+  <div class="screen-inner">
+    ${topbar('Check-In', {noBack:true})}
+    <div class="px">
+      <div class="card" style="text-align:center;">
+        <p style="font-size:34px;margin:0 0 8px;">⚠️</p>
+        <h2 class="h2">Have you reached safely?</h2>
+        <p class="lede" style="margin-bottom:20px;">${overdue ? "Your estimated arrival time has passed and we haven't heard from you yet." : 'Quick check-in on your journey.'}</p>
+        <div class="stack">
+          <button class="btn btn-primary" data-action="checkinReached">✅ I Have Reached</button>
+          <button class="btn btn-quiet" data-action="checkinTraveling">🟢 I Am Still Traveling</button>
+          <button class="btn btn-danger" data-action="checkinNeedHelp">🚨 I Need Help</button>
+        </div>
+      </div>
+      <p class="small" style="margin-top:14px;text-align:center;">We never assume an emergency just because time has passed — this check-in lets you tell us what's happening.</p>
+    </div>
+  </div>`;
+}
+
+/* -------- Incident report + analyzer -------- */
+function screen_incidentReport() {
+  const d = S.incidentDraft;
+  return `
+  <div class="screen-inner">
+    ${topbar('Report a Safety Concern')}
+    <div class="px">
+      <div class="field">
+        <label>What happened</label>
+        <textarea id="incidentText" placeholder="Describe what happened. Share only the information you are comfortable providing.">${d.text}</textarea>
+      </div>
+      <div class="field">
+        <label>Category</label>
+        <select id="incidentCategory">
+          <option value="">Select a category</option>
+          ${DB.incidentCategories.map(c => `<option ${d.category===c?'selected':''}>${c}</option>`).join('')}
+        </select>
+      </div>
+      <div class="chip-row" style="margin-bottom:18px;">
+        <button class="chip" data-action="voiceSim">🎤 Voice input (simulated)</button>
+        <button class="chip ${d.locationShared?'active':''}" data-action="toggleLocation">📍 ${d.locationShared ? 'Location shared' : 'Share location'}</button>
+      </div>
+      <button class="btn btn-primary" data-action="analyzeIncident">🤖 Analyze Incident</button>
+    </div>
+  </div>`;
+}
+
+function analyzeIncidentMock() {
+  const d = S.incidentDraft;
+  const textLen = d.text.trim().length;
+  let level = 'low', score = 28;
+  const lower = d.text.toLowerCase();
+  if (/follow|stalk|scared|unsafe now|threat|grab|touch/.test(lower)) { level = 'critical'; score = 88; }
+  else if (/watch|suspicious|uncomfortable|repeatedly/.test(lower)) { level = 'high'; score = 68; }
+  else if (textLen > 0) { level = 'medium'; score = 46; }
+  const priorityMap = {
+    low: ['Routine Review', '🟢', 'This report will be reviewed in the normal queue based on the information available.'],
+    medium: ['Priority Review', '🟡', 'This report has been flagged for earlier review based on the details provided.'],
+    high: ['Urgent Attention', '🟠', 'This report indicates factors that may need prompt attention.'],
+    critical: ['Immediate Emergency Attention', '🔴', 'This report contains indicators consistent with an ongoing safety concern.'],
+  };
+  const factors = [];
+  factors.push(textLen > 0 ? 'Description provided by user' : 'No description provided — marked as Not provided');
+  factors.push(d.category ? `Categorized as "${d.category}"` : 'Category: Not provided');
+  factors.push(d.locationShared ? 'Location context was provided' : 'Location was not shared');
+  if (/follow|stalk/.test(lower)) factors.push('Language suggests the situation may be ongoing');
+  const safePointAvailable = d.locationShared ? Math.random() > 0.4 : false;
+  S.incidentAnalysis = { level, score, priority: priorityMap[level], factors, safePointAvailable, category: d.category || 'Not provided' };
+}
+
+function screen_incidentAnalysis() {
+  const a = S.incidentAnalysis;
+  return `
+  <div class="screen-inner">
+    ${topbar('AI Incident Analyzer')}
+    <div class="px">
+      <div class="disc" style="margin-bottom:16px;">AI-generated insight for review — not a verified fact. Nothing here overrides your own judgment.</div>
+
+      <p class="eyebrow">Incident type</p>
+      <div class="card" style="margin-bottom:12px;"><strong>${a.category}</strong></div>
+
+      <p class="eyebrow">AI risk analysis</p>
+      <div class="card" style="margin-bottom:12px;">
+        <div class="row-between" style="margin-bottom:10px;">
+          ${riskBadge(a.level)}
+          <span class="small">Risk Score: <strong style="color:var(--text-hi);">${a.score} / 100</strong></span>
+        </div>
+        <p class="small" style="margin-bottom:8px;font-weight:600;color:var(--text-mid);">Key factors</p>
+        <ul style="margin:0;padding-left:18px;color:var(--text-mid);font-size:13.5px;line-height:1.7;">
+          ${a.factors.map(f => `<li>${f}</li>`).join('')}
+        </ul>
+        <p class="small" style="margin-top:10px;">This score is an AI-generated demonstration estimate, not a certainty.</p>
+      </div>
+
+      <p class="eyebrow">AI summary</p>
+      <div class="card" style="margin-bottom:12px;">
+        <p class="lede">"User reports a possible safety concern${a.category!=='Not provided' ? ` related to ${a.category.toLowerCase()}` : ''}. Based on the information provided, this situation may require ${a.priority[0].toLowerCase()}."</p>
+      </div>
+
+      <p class="eyebrow">Response priority</p>
+      <div class="card" style="margin-bottom:12px;">
+        <p style="font-weight:700;margin:0 0 6px;">${a.priority[1]} ${a.priority[0]}</p>
+        <p class="lede">${a.priority[2]}</p>
+      </div>
+
+      <p class="eyebrow">Nearest verified Safe Point</p>
+      <div class="card" style="margin-bottom:16px;">
+        ${a.safePointAvailable ? `
+          <p style="margin:0 0 4px;">📍 <strong>Campus Security Office</strong></p>
+          <p class="small" style="margin-bottom:10px;">Distance: 350 meters · Status: ✓ Verified</p>
+          <button class="btn btn-quiet btn-sm" data-action="viewSafePoint">View on Map</button>
+        ` : `
+          <p style="margin:0 0 6px;">⚠️ No verified Safe Point found nearby</p>
+          <p class="small" style="margin-bottom:10px;">HerWay AI could not find a verified Safe Point nearby based on the available demonstration data.</p>
+          <div class="disc">⚠️ Possible Safe Point coverage gap — this area may require administrative review for safety infrastructure coverage.</div>
+        `}
+      </div>
+
+      <button class="btn btn-primary" data-nav="safetyRecommendation">View Safety Recommendation</button>
+      <button class="btn btn-ghost" style="margin-top:10px;" data-nav="home">Back to Home</button>
+    </div>
+  </div>`;
+}
+
+function screen_safetyRecommendation() {
+  const a = S.incidentAnalysis;
+  return `
+  <div class="screen-inner">
+    ${topbar('Safety Recommendation')}
+    <div class="px">
+      <p class="eyebrow">🛡️ Combining SafeRoute, Incident Analyzer, Assistant &amp; Safe Points</p>
+      <div class="card" style="margin-bottom:12px;">
+        <h3 class="h2" style="font-size:16px;">Current Situation</h3>
+        <p class="lede">${a ? `A report was recently submitted and rated ${a.level.toUpperCase()} based on the information you shared.` : 'No recent incident on file — this reflects your general safety context right now.'}</p>
+      </div>
+      <div class="card" style="margin-bottom:12px;">
+        <h3 class="h2" style="font-size:16px;">Available Safety Information</h3>
+        <p class="lede">Demonstration data suggests your area has ${a && a.safePointAvailable ? 'at least one nearby verified Safe Point' : 'limited verified Safe Point coverage'}.</p>
+      </div>
+      <div class="card" style="margin-bottom:12px;">
+        <h3 class="h2" style="font-size:16px;">Risk Awareness</h3>
+        <p class="lede">${a ? `Reported factors point to a ${a.level} likelihood of ongoing concern, based only on what was shared.` : 'No specific risk indicators are on file at the moment.'}</p>
+      </div>
+      <div class="card" style="margin-bottom:12px;">
+        <h3 class="h2" style="font-size:16px;">Nearby Support</h3>
+        <p class="lede">${S.selectedGuardianIds.length} Guardian${S.selectedGuardianIds.length===1?'':'s'} can be notified if you choose to share your location.</p>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <h3 class="h2" style="font-size:16px;">Recommended Next Step</h3>
+        <p class="lede">${a && (a.level==='critical'||a.level==='high') ? 'Consider using Emergency Mode or contacting a Guardian directly.' : "Continue as planned, and consider sharing your journey on SafeRoute if you're heading out."}</p>
+      </div>
+      <div class="disc" style="margin-bottom:16px;">This recommendation is generated from limited demonstration data and cannot guarantee your safety. Trust your own judgment above all.</div>
+      <button class="btn btn-danger" data-action="openEmergency">🚨 Emergency Mode</button>
+    </div>
+  </div>`;
+}
+
+/* -------- AI Assistant -------- */
+const QUICK_PROMPTS = [
+  ['🗺️', 'How does SafeRoute work?'],
+  ['🚨', 'How do I report an incident?'],
+  ['🛡️', 'How do Guardians work?'],
+  ['📍', 'What are Safe Points?'],
+  ['⚠️', 'When should I use Emergency Mode?'],
+];
+const ASSISTANT_ANSWERS = {
+  'How does SafeRoute work?': "SafeRoute compares route options using demonstration safety information and shows you distance, time, and nearby Safe Points, then lets you share your live journey with chosen Guardians. It's advisory — it can't guarantee a route is safe.",
+  'How do I report an incident?': "Open Incident Report, describe what happened in as much or as little detail as you're comfortable with, pick a category, and tap Analyze. The AI organizes what you shared — it never adds facts you didn't provide.",
+  'How do Guardians work?': "Guardians are people you explicitly choose in My Guardians. They can only see a journey while you're actively sharing it, and they're notified automatically when you confirm you've arrived.",
+  'What are Safe Points?': "Safe Points are demonstration locations marked as verified — like a security office or help desk. If none are found near you, HerWay AI tells you honestly instead of inventing one.",
+  'When should I use Emergency Mode?': "Use Emergency Mode any time you feel you need immediate help. It gives you one-tap access to contacting Guardians, sharing your location, filing an urgent report, or reaching available assistance.",
+};
+function screen_assistant() {
+  return `
+  <div class="screen-inner">
+    ${topbar('HerWay AI Assistant')}
+    <div class="px" style="display:flex;flex-direction:column;height:calc(100vh - 220px);">
+      <div id="chatlog" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-bottom:12px;">
+        ${S.chat.map(m => `<div class="msg ${m.from}">${m.text}</div>`).join('')}
+      </div>
+      <div class="chip-row" style="margin-bottom:10px;">
+        ${QUICK_PROMPTS.map(([icon, text]) => `<button class="quickprompt" data-quickprompt="${text}">${icon} ${text}</button>`).join('')}
+      </div>
+      <div style="display:flex;gap:8px;">
+        <input id="chatInput" placeholder="Ask about a HerWay AI feature…" style="flex:1;background:var(--ink-900);border:1px solid var(--line);border-radius:100px;padding:12px 16px;color:var(--text-hi);outline:none;">
+        <button class="btn btn-primary btn-sm" style="width:48px;height:48px;border-radius:50%;padding:0;" data-action="sendChat">↑</button>
+      </div>
+      <p class="small" style="margin-top:8px;">HerWay AI Assistant offers general guidance only and can't guarantee personal safety.</p>
+    </div>
+  </div>`;
+}
+
+/* -------- Guardians management -------- */
+function screen_guardiansManage() {
+  return `
+  <div class="screen-inner">
+    ${topbar('My Trusted Guardians')}
+    <div class="px">
+      <div class="stack" style="margin-bottom:16px;">
+        ${DB.guardians.map(g => `
+          <div class="card" style="display:flex;align-items:center;gap:12px;">
+            <span class="avatar">${g.avatar}</span>
+            <div style="flex:1;">
+              <div style="font-weight:600;font-size:14.5px;">${g.name}</div>
+              <div class="small">${g.relation} · <span class="pill-status ${g.active?'status-active':'status-done'}" style="padding:2px 8px;">${g.active ? 'Active' : 'Inactive'}</span></div>
+            </div>
+            <button class="link-btn" data-action="removeGuardian" data-gid="${g.id}">Remove</button>
+          </div>
+        `).join('')}
+      </div>
+      <button class="btn btn-ghost" data-action="addGuardian">➕ Add Guardian</button>
+      <p class="small" style="margin-top:14px;">Only Guardians you explicitly add or authorize can ever receive your journey information.</p>
+    </div>
+  </div>`;
+}
+
+/* -------- Guardian dashboard -------- */
+function screen_guardianHome() {
+  const j = DB.activeJourneys[0];
+  const overdue = j.status === 'overdue';
+  return `
+  <div class="screen-inner">
+    ${topbar('Women Guardian Dashboard', {noBack:true})}
+    <div class="px">
+      <p class="lede" style="margin-bottom:18px;">Supporting users who have chosen to share their journey with you.</p>
+
+      <p class="eyebrow">🟢 Active journeys</p>
+      <div class="card" style="margin-bottom:14px;">
+        <div class="row-between" style="margin-bottom:10px;">
+          <span style="display:flex;align-items:center;gap:10px;"><span class="avatar">${j.user[0]}</span><strong>${j.user}</strong></span>
+          <span class="pill-status ${overdue ? 'status-pending' : 'status-active'}">${overdue ? '⚠️ Awaiting check-in' : '🟢 Active'}</span>
+        </div>
+        <div class="row-between small" style="margin-bottom:4px;"><span>Destination</span><strong style="color:var(--text-hi);">${j.destination}</strong></div>
+        <div class="row-between small" style="margin-bottom:12px;"><span>Expected arrival</span><strong style="color:var(--text-hi);">${j.eta}</strong></div>
+        <button class="btn btn-quiet btn-sm" data-nav="guardianJourneyView">View Journey</button>
+      </div>
+
+      ${overdue ? `
+      <div class="card" style="margin-bottom:14px;">
+        <p style="font-weight:700;margin:0 0 6px;">⚠️ Arrival Confirmation Pending</p>
+        <p class="small" style="margin-bottom:12px;">${j.user} hasn't confirmed arrival yet. HerWay AI does not assume an emergency automatically.</p>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-quiet btn-sm" data-action="guardianContact">📞 Contact User</button>
+          <button class="btn btn-ghost btn-sm" data-nav="guardianJourneyView">View Shared Journey</button>
+        </div>
+      </div>` : ''}
+
+      <p class="eyebrow">Recent activity</p>
+      <div class="card">
+        <p class="small">No completed journeys yet in this demo session. Once ${j.user} confirms arrival, you'll see it here.</p>
+      </div>
+    </div>
+  </div>`;
+}
+
+function screen_guardianJourneyView() {
+  const j = DB.activeJourneys[0];
+  const overdue = j.status === 'overdue';
+  return `
+  <div class="screen-inner">
+    ${topbar(`${j.user}'s Journey`)}
+    <div class="px">
+      <div class="mapcard" style="margin-bottom:14px;">
+        ${mapSvgRoute(overdue ? 1 : 0.6)}
+        <div class="map-pin start" style="left:13%;top:86%;"><div class="pinhead"></div><span class="label">Start</span></div>
+        <div class="map-pin live" style="left:${overdue?88:60}%;top:${overdue?9:30}%;"><div class="pinhead"></div><span class="label">${j.user}</span></div>
+        <div class="map-pin end" style="left:88%;top:9%;"><div class="pinhead"></div><span class="label">Destination</span></div>
+      </div>
+      <div class="card" style="margin-bottom:14px;">
+        <div class="stack">
+          <div class="row-between"><span class="small">Selected route</span><strong>Recommended route</strong></div>
+          <div class="row-between"><span class="small">Destination</span><strong>${j.destination}</strong></div>
+          <div class="row-between"><span class="small">Expected arrival</span><strong>${j.eta}</strong></div>
+          <div class="row-between"><span class="small">Journey status</span><strong style="color:${overdue?'var(--amberwarn)':'var(--moss)'}">${overdue ? 'Awaiting check-in' : 'Active'}</strong></div>
+        </div>
+      </div>
+      <p class="small">You can see this live location only while ${j.user} has an active, authorized sharing session with you.</p>
+    </div>
+  </div>`;
+}
+
+function screen_guardianPatterns() {
+  return `
+  <div class="screen-inner">
+    ${topbar('AI Safety Pattern Detection', {noBack:true})}
+    <div class="px">
+      <div class="disc" style="margin-bottom:16px;">AI-generated insights for authorized review. Patterns are not proof of danger — they flag areas worth a closer look.</div>
+      <div class="stack">
+        ${DB.patterns.map(p => `
+          <div class="card">
+            <p style="font-weight:700;margin:0 0 6px;">⚠️ Possible safety pattern detected</p>
+            <p class="lede" style="margin-bottom:8px;">${p.note}</p>
+            <div class="row-between small"><span>${p.area}</span><strong style="color:var(--text-hi);">${p.count} reports</strong></div>
+          </div>
+        `).join('')}
+      </div>
+      <p class="small" style="margin-top:14px;">HerWay AI does not automatically label any location as dangerous based on limited data.</p>
+    </div>
+  </div>`;
+}
+
+/* -------- Profile -------- */
+function screen_profile() {
+  return `
+  <div class="screen-inner">
+    ${topbar('Profile & Settings', {noBack:true})}
+    <div class="px">
+      <div class="card" style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <span class="avatar" style="width:52px;height:52px;font-size:18px;">${S.role==='guardian' ? 'G' : DB.user.initials}</span>
+        <div>
+          <div style="font-weight:700;font-size:16px;">${S.role==='guardian' ? 'Priya (Guardian)' : DB.user.name}</div>
+          <div class="small">${S.role==='guardian' ? 'Women Guardian' : 'Woman / User'} · Demo account</div>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="toggle-row"><span>Live location during journeys</span><button class="switch on" data-toggle="loc"><span class="knob"></span></button></div>
+        <div class="toggle-row"><span>Guardian arrival notifications</span><button class="switch on" data-toggle="notif"><span class="knob"></span></button></div>
+        <div class="toggle-row"><span>AI incident summaries</span><button class="switch on" data-toggle="ai"><span class="knob"></span></button></div>
+      </div>
+      <button class="btn btn-ghost" style="margin-bottom:10px;" data-action="switchRole">Switch Role</button>
+      <button class="btn btn-quiet" data-action="signOut">Sign Out</button>
+      <p class="small" style="margin-top:16px;text-align:center;">HerWay AI — Promptathon prototype. All data shown is simulated.</p>
+    </div>
+  </div>`;
+}
+
+/* -------- Emergency Mode (modal) -------- */
+function emergencyModal() {
+  if (!S.emergency.open) return '';
+  return `
+  <div class="modal-back" data-action="closeEmergencyBack">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <div style="text-align:center;margin-bottom:18px;">
+        <p style="font-size:36px;margin:0;">🚨</p>
+        <h2 class="h2" style="color:var(--brick);">Emergency Mode Active</h2>
+        <p class="lede">Choose an action below. This is a prototype — no real calls or messages are sent.</p>
+      </div>
+      <div class="stack">
+        <button class="btn btn-danger" data-action="emergencyAct" data-what="Contacting your trusted Guardians (simulated)">📞 Contact Trusted Guardians</button>
+        <button class="btn btn-quiet" data-action="emergencyAct" data-what="Location shared with permission (simulated)">📍 Share Location With Permission</button>
+        <button class="btn btn-quiet" data-action="emergencyAct" data-what="Urgent incident submitted (simulated)">🚨 Submit Urgent Incident</button>
+        <button class="btn btn-quiet" data-action="emergencyAct" data-what="Connecting to available assistance (simulated)">🛡️ Access Available Assistance</button>
+      </div>
+      <button class="btn btn-ghost" style="margin-top:14px;" data-action="closeEmergency">Close</button>
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   ROUTER / RENDER
+============================================================ */
+const SCREENS = {
+  auth: screen_auth,
+  role: screen_role,
+  home: screen_home,
+  saferouteInput: screen_saferouteInput,
+  routeResults: screen_routeResults,
+  shareJourney: screen_shareJourney,
+  journeyTracking: screen_journeyTracking,
+  checkin: screen_checkin,
+  incidentReport: screen_incidentReport,
+  incidentAnalysis: screen_incidentAnalysis,
+  safetyRecommendation: screen_safetyRecommendation,
+  assistant: screen_assistant,
+  guardiansManage: screen_guardiansManage,
+  guardianHome: screen_guardianHome,
+  guardianJourneyView: screen_guardianJourneyView,
+  guardianPatterns: screen_guardianPatterns,
+  profile: screen_profile,
+};
+
+function activeNavId() {
+  if (['saferouteInput','routeResults','shareJourney','journeyTracking','checkin'].includes(S.screen)) return 'saferouteInput';
+  if (['incidentReport','incidentAnalysis','safetyRecommendation'].includes(S.screen)) return 'incidentReport';
+  if (S.screen === 'assistant') return 'assistant';
+  if (S.screen === 'profile') return 'profile';
+  if (['guardianHome','guardianJourneyView'].includes(S.screen)) return 'guardianHome';
+  if (S.screen === 'guardianPatterns') return 'guardianPatterns';
+  return 'home';
+}
+
+function render() {
+  const fn = SCREENS[S.screen] || screen_home;
+  const needsNav = !['auth', 'role'].includes(S.screen);
+  document.getElementById('screen').innerHTML = `
+    ${fn()}
+    ${needsNav ? sosFab() : ''}
+    ${needsNav ? bottomNav(activeNavId()) : ''}
+    ${emergencyModal()}
+  `;
+  if (S.screen === 'assistant') {
+    const log = document.getElementById('chatlog');
+    if (log) log.scrollTop = log.scrollHeight;
+  }
+}
+
+/* ============================================================
+   EVENT HANDLING (delegated)
+============================================================ */
+document.addEventListener('click', (e) => {
+  const back_ = e.target.closest('[data-action="back"]');
+  if (back_) { back(); return; }
+
+  const nav = e.target.closest('[data-nav]');
+  if (nav) { go(nav.dataset.nav); return; }
+
+  const travel = e.target.closest('[data-travel]');
+  if (travel) {
+    document.querySelectorAll('[data-travel]').forEach(el => el.classList.remove('active'));
+    travel.classList.add('active');
+    return;
+  }
+
+  const act = e.target.closest('[data-action]');
+  if (act) {
+    handleAction(act.dataset.action, act);
+    return;
+  }
+
+  const qp = e.target.closest('[data-quickprompt]');
+  if (qp) { sendChat(qp.dataset.quickprompt); return; }
+
+  const toggle = e.target.closest('[data-toggle]');
+  if (toggle) { toggle.classList.toggle('on'); return; }
+});
+
+document.addEventListener('change', (e) => {
+  const gcheck = e.target.closest('[data-guardian-check]');
+  if (gcheck) {
+    const id = gcheck.dataset.guardianCheck;
+    if (gcheck.checked) { if (!S.selectedGuardianIds.includes(id)) S.selectedGuardianIds.push(id); }
+    else { S.selectedGuardianIds = S.selectedGuardianIds.filter(x => x !== id); }
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && document.activeElement && document.activeElement.id === 'chatInput') {
+    sendChat();
+  }
+});
+
+function handleAction(action, el) {
+  switch (action) {
+    case 'signin':
+      go('role');
+      break;
+    case 'chooseRole': {
+      const role = el.dataset.role;
+      S.role = role;
+      S.history = [];
+      go(role === 'user' ? 'home' : 'guardianHome');
+      break;
+    }
+    case 'switchRole':
+      S.role = S.role === 'user' ? 'guardian' : 'user';
+      S.history = [];
+      go(S.role === 'user' ? 'home' : 'guardianHome');
+      toast(`Switched to ${S.role === 'user' ? 'User' : 'Guardian'} role`);
+      break;
+    case 'signOut':
+      S = { ...S, screen: 'auth', role: null, history: [] };
+      render();
+      break;
+    case 'analyzeRoutes':
+      go('routeResults');
+      break;
+    case 'selectRoute':
+      S.selectedRoute = DB.routes.find(r => r.id === el.dataset.route);
+      go('shareJourney');
+      break;
+    case 'startJourney':
+      S.journey = { status: 'active', eta: nowPlus(S.selectedRoute ? S.selectedRoute.minutes : 18) };
+      go('journeyTracking');
+      toast('Journey started — selected Guardians notified');
+      break;
+    case 'arrivedSafely':
+      S.journey.status = 'done';
+      render();
+      toast('Live journey sharing has stopped');
+      DB.activeJourneys[0].status = 'done';
+      break;
+    case 'simulateOverdue':
+      S.checkin.mode = 'overdue';
+      DB.activeJourneys[0].status = 'overdue';
+      go('checkin');
+      break;
+    case 'checkinReached':
+      S.journey.status = 'done';
+      go('journeyTracking');
+      toast('Marked as reached — tracking stopped');
+      DB.activeJourneys[0].status = 'done';
+      break;
+    case 'checkinTraveling':
+      S.journey.eta = nowPlus(12);
+      DB.activeJourneys[0].status = 'active';
+      go('journeyTracking');
+      toast('Estimated arrival updated');
+      break;
+    case 'checkinNeedHelp':
+      openEmergency();
+      break;
+    case 'voiceSim':
+      toast('Voice input simulated — nothing recorded in this prototype');
+      break;
+    case 'toggleLocation':
+      S.incidentDraft.locationShared = !S.incidentDraft.locationShared;
+      render();
+      break;
+    case 'analyzeIncident': {
+      const text = document.getElementById('incidentText').value;
+      const category = document.getElementById('incidentCategory').value;
+      S.incidentDraft.text = text;
+      S.incidentDraft.category = category;
+      analyzeIncidentMock();
+      go('incidentAnalysis');
+      break;
+    }
+    case 'viewSafePoint':
+      toast('Safe Point shown on demonstration map');
+      break;
+    case 'addGuardian':
+      toast('Guardian invite simulated — they would confirm before being added');
+      break;
+    case 'removeGuardian':
+      DB.guardians = DB.guardians.filter(g => g.id !== el.dataset.gid);
+      render();
+      toast('Guardian removed');
+      break;
+    case 'sendChat':
+      sendChat();
+      break;
+    case 'openEmergency':
+      openEmergency();
+      break;
+    case 'closeEmergency':
+    case 'closeEmergencyBack':
+      S.emergency.open = false;
+      render();
+      break;
+    case 'emergencyAct':
+      toast(el.dataset.what);
+      break;
+    case 'guardianContact':
+      toast('Calling Ananya (simulated)');
+      break;
+  }
+}
+
+function openEmergency() {
+  S.emergency.open = true;
+  render();
+}
+
+function sendChat(promptText) {
+  const input = document.getElementById('chatInput');
+  const text = promptText || (input ? input.value.trim() : '');
+  if (!text) return;
+  S.chat.push({ from: 'user', text });
+  const answer = ASSISTANT_ANSWERS[text] || "I can help with SafeRoute, Incident Reporting, Guardians, Safe Points, or Emergency Mode — try one of the quick prompts, or ask about a specific feature. I offer general guidance only and can't guarantee personal safety.";
+  S.chat.push({ from: 'ai', text: answer });
+  render();
+}
+
+/* bottom nav dispatch (separate from data-action to avoid clash) */
+document.addEventListener('click', (e) => {
+  const navBtn = e.target.closest('.navitem');
+  if (navBtn) go(navBtn.dataset.nav);
+});
+
+render();
+
+</script>
+</body>
+</html>
